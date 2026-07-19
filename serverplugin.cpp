@@ -42,7 +42,7 @@ IHLTVDirector *hltvdirector = NULL;
 template<typename T>
 bool LoadInterface(T*& pResult, CreateInterfaceFn factory, const char *pszInterfaceName, int nVersionStart)
 {
-	Msg("cvar-unhide: Loading %s%.3d ", pszInterfaceName, nVersionStart);
+	ConColorMsg(COLOUR_CYAN, "cvar-unhide: Loading %s%.3d ", pszInterfaceName, nVersionStart);
 
 	for (int i = nVersionStart; i < nVersionStart + 5; ++i)
 	{
@@ -61,7 +61,7 @@ bool LoadInterface(T*& pResult, CreateInterfaceFn factory, const char *pszInterf
 			return true;
 		}
 
-		Warning("FAILED\n");
+		ConColorMsg(COLOUR_YELLOW, "FAILED\n");
 	}
 
 	Warning("  - giving up.\n");
@@ -200,7 +200,10 @@ CON_COMMAND(cvar_unhide_all, "Unhide all FCVAR_HIDDEN and FCVAR_DEVELOPMENTONLY 
 		cmd->RemoveFlags(FCVAR_DEVELOPMENTONLY | FCVAR_HIDDEN);
 	}
 
-	Msg("cvar_unhide_all: Removed FCVAR_DEVELOPMENTONLY and FCVAR_HIDDEN from %d ConVars\n", nUnhidden);
+	if( nUnhidden )
+		ConColorMsg(COLOUR_GREEN, "cvar_unhide_all: Removed FCVAR_DEVELOPMENTONLY and FCVAR_HIDDEN from %d ConVars\n", nUnhidden);
+	else
+		ConColorMsg(COLOUR_YELLOW, "cvar_unhide_all: Removed FCVAR_DEVELOPMENTONLY and FCVAR_HIDDEN from %d ConVars\n", nUnhidden);
 }
 
 //-----------------------------------------------------------------------------
