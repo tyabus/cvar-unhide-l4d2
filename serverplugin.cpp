@@ -14,6 +14,7 @@
 #include "dbg.h"
 #include "tier1/tier1.h"
 #include "engine/iserverplugin.h"
+#include "tier0/icommandline.h"
 #include "ihltvdirector.h"
 #include "eiface.h"
 #include "convar.h"
@@ -138,6 +139,29 @@ bool CServerPlugin::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn g
 
 	MathLib_Init();
 	ConVar_Register();
+
+	// This early it is possible to miss something
+	if(CommandLine()->CheckParm( "-autounhide" ))
+	{
+		ICvar::Iterator iter(g_pCVar);
+
+		int nUnhidden = 0;
+
+		for (iter.SetFirst(); iter.IsValid(); iter.Next())
+		{
+			ConCommandBase *cmd = iter.Get();
+
+			if (cmd->IsFlagSet(FCVAR_DEVELOPMENTONLY | FCVAR_HIDDEN))
+				nUnhidden++;
+
+			cmd->RemoveFlags(FCVAR_DEVELOPMENTONLY | FCVAR_HIDDEN);
+		}
+
+		if( nUnhidden )
+			ConColorMsg(COLOUR_GREEN, "cvar_unhide_all: Removed FCVAR_DEVELOPMENTONLY and FCVAR_HIDDEN from %d ConVars\n", nUnhidden);
+		else
+			ConColorMsg(COLOUR_YELLOW, "cvar_unhide_all: Removed FCVAR_DEVELOPMENTONLY and FCVAR_HIDDEN from %d ConVars\n", nUnhidden);
+	}
 
 	return true;
 }
