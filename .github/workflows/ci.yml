@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ l4d2 ]
   pull_request:
-    branches: [ master ]
+    branches: [ l4d2 ]
   workflow_dispatch:
 
 jobs:
@@ -13,14 +13,14 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-2019, ubuntu-18.04]
+        os: [windows-2022, ubuntu-22.04]
         game: [l4d2]
 
     outputs:
       version: ${{ steps.version.outputs.version }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Checkout hl2sdk
       run: |
@@ -44,7 +44,7 @@ jobs:
         string: ${{ matrix.game }}
 
     - name: Write version.h
-      uses: DamianReeves/write-file-action@v1.0
+      uses: DamianReeves/write-file-action@v1.3
       with:
         path: version.h
         contents: |
@@ -53,34 +53,34 @@ jobs:
         write-mode: overwrite
 
     - name: Add MSBuild to PATH
-      if: ${{ matrix.os == 'windows-2019' }}
-      uses: microsoft/setup-msbuild@v1.0.2
+      if: ${{ matrix.os == 'windows-2022' }}
+      uses: microsoft/setup-msbuild@v2
 
     - name: Build plugin (Windows)
-      if: ${{ matrix.os == 'windows-2019' }}
+      if: ${{ matrix.os == 'windows-2022' }}
       run: msbuild /m /p:Configuration=Release cvar-unhide.sln
 
     - name: Build plugin (Linux)
-      if: ${{ matrix.os == 'ubuntu-18.04' }}
+      if: ${{ matrix.os == 'ubuntu-22.04' }}
       uses: docker://saulren/serverplugin-base:latest
       with:
         args: make plugin
 
     - name: Archive binaries
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: addons-${{ matrix.game }}-${{ matrix.os }}
         path: addons
-        retention-days: 5
+        retention-days: 7
 
   deploy:
     needs: [build]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/l4d2'
     name: Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
