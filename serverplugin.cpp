@@ -388,7 +388,7 @@ public:
 
 } copier;
 
-#ifdef CVAR_UNHIDE_GAME_L4D2
+#if defined(CVAR_UNHIDE_GAME_L4D2) || defined(CVAR_UNHIDE_GAME_L4D)
 struct CVValue_t
 {
 	char*& m_pszString;
@@ -403,7 +403,7 @@ class CCvar
 public:
 	static void ForceSetValue(ConVar *pVar, const char *pszNewValue, bool bNoCallback)
 	{
-#ifdef CVAR_UNHIDE_GAME_L4D2
+#if defined(CVAR_UNHIDE_GAME_L4D2) || defined(CVAR_UNHIDE_GAME_L4D)
 		CVValue_t value = { pVar->m_pszString, pVar->m_StringLength, pVar->m_nValue, pVar->m_fValue };
 #else
 		ConVar::CVValue_t& value = pVar->GetRawValue();
@@ -433,7 +433,7 @@ public:
 		// Invoke any necessary callback function
 		if (!bNoCallback)
 		{
-#ifdef CVAR_UNHIDE_GAME_L4D2
+#if defined(CVAR_UNHIDE_GAME_L4D2) || defined(CVAR_UNHIDE_GAME_L4D)
 			if (pVar->m_fnChangeCallback != NULL)
 			{
 				(*pVar->m_fnChangeCallback)(pVar, pszOldValue, flOldValue);
@@ -503,7 +503,7 @@ void DumpSendTable(SendTable *pTable, int nDepth)
 		case DPT_String: Msg("string"); break;
 		case DPT_Array: Msg("array[%d]", pProp->GetNumElements()); break;
 		case DPT_DataTable: Msg("datatable"); break;
-#ifndef CVAR_UNHIDE_GAME_L4D2
+#if !defined(CVAR_UNHIDE_GAME_L4D2) || defined(CVAR_UNHIDE_GAME_L4D)
 		case DPT_Int64: Msg("int64"); break;
 #endif
 		default: Warning("unknown"); break;
