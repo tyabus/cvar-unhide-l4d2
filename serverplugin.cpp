@@ -530,7 +530,7 @@ void DumpSendTable(SendTable *pTable, int nDepth)
 		case DPT_String: Msg("string"); break;
 		case DPT_Array: Msg("array[%d]", pProp->GetNumElements()); break;
 		case DPT_DataTable: Msg("datatable"); break;
-#if !defined(CVAR_UNHIDE_GAME_L4D2) || defined(CVAR_UNHIDE_GAME_L4D)
+#if !defined(CVAR_UNHIDE_GAME_L4D2) && !defined(CVAR_UNHIDE_GAME_L4D)
 		case DPT_Int64: Msg("int64"); break;
 #endif
 		default: Warning("unknown"); break;
