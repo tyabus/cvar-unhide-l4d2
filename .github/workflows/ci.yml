@@ -14,13 +14,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-2019, ubuntu-18.04]
-        game: [csgo, l4d2, portal2]
-        exclude:
-          # No Linux binaries for these games
-          - os: ubuntu-18.04
-            game: l4d2
-          - os: ubuntu-18.04
-            game: portal2
+        game: [l4d2]
 
     outputs:
       version: ${{ steps.version.outputs.version }}
