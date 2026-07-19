@@ -73,8 +73,8 @@ DEFINES += -DCOMPILER_GCC -DPOSIX -DVPROF_LEVEL=1 -DSWDS -D_finite=finite -Dstri
 	-D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_vsnprintf=vsnprintf -D_alloca=alloca -Dstrcmpi=strcasecmp
 UNDEF = -Usprintf -Ustrncpy -UPROTECTED_THINGS_ENABLE
 
-BASE_CFLAGS = -fno-strict-aliasing -Wall -Werror -Wno-conversion -Wno-overloaded-virtual -Wno-non-virtual-dtor -Wno-invalid-offsetof \
-	      -Wno-unused
+BASE_CFLAGS = -std=c++11 -fno-strict-aliasing -Wall -Werror -Wno-conversion -Wno-overloaded-virtual -Wno-non-virtual-dtor -Wno-invalid-offsetof \
+	      -Wno-unused -Wno-register
 SHLIBCFLAGS = -fPIC
 
 # Flags passed to the c compiler
@@ -110,8 +110,8 @@ check:
 	cd $(BUILD_DIR)
 	if [ ! -e "$(LIB_DIR)/tier1_i486.a" ]; then $(MAKE) tier1;fi
 	if [ ! -e "$(LIB_DIR)/mathlib_i486.a" ]; then $(MAKE) mathlib;fi
-	if [ ! -f "libtier0.$(SHLIBEXT)" ]; then ln -s $(LIB_DIR)/libtier0_srv.$(SHLIBEXT) .; fi
-	if [ ! -f "libvstdlib.$(SHLIBEXT)" ]; then ln -s $(LIB_DIR)/libvstdlib_srv.$(SHLIBEXT) .; fi
+	if [ ! -f "$(LIB_DIR)/libtier0.$(SHLIBEXT)" ]; then ln -sf libtier0_srv.$(SHLIBEXT) $(LIB_DIR)/libtier0.$(SHLIBEXT); fi
+	if [ ! -f "$(LIB_DIR)/libvstdlib.$(SHLIBEXT)" ]; then ln -sf libvstdlib_srv.$(SHLIBEXT) $(LIB_DIR)/libvstdlib.$(SHLIBEXT); fi
 
 plugin: check
 	$(MAKE) -f $(MAKE_PLUGIN) $(BASE_DEFINES)
