@@ -13,7 +13,7 @@ CPP_LIB =
 else
 CC = /usr/bin/gcc
 CPLUS = /usr/bin/g++
-CLINK = /usr/bin/gcc
+CLINK = /usr/bin/g++
 CPP_LIB = "libgcc_s.so.1"
 endif
 
