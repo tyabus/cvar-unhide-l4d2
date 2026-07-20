@@ -23,6 +23,11 @@
 #include "server_class.h"
 #include "version.h"
 
+// ASW requires interfaces.lib to link
+#if defined(CVAR_UNHIDE_GAME_SWARM)
+#pragma comment(lib, "interfaces.lib")
+#endif
+
 //-----------------------------------------------------------------------------
 // Colours
 //-----------------------------------------------------------------------------
@@ -98,7 +103,11 @@ public:
 	virtual PLUGIN_RESULT	ClientConnect( bool *bAllowConnect, edict_t *pEntity, const char *pszName, const char *pszAddress, char *reject, int maxrejectlen ) { return PLUGIN_CONTINUE; }
 	virtual PLUGIN_RESULT	ClientCommand( edict_t *pEntity, const CCommand &args ) { return PLUGIN_CONTINUE; }
 	virtual PLUGIN_RESULT	NetworkIDValidated( const char *pszUserName, const char *pszNetworkID ) { return PLUGIN_CONTINUE; }
+
+	// Added with version 2 of the interface.
 	virtual void			OnQueryCvarValueFinished( QueryCvarCookie_t iCookie, edict_t *pPlayerEntity, EQueryCvarValueStatus eStatus, const char *pCvarName, const char *pCvarValue ) {};
+
+	// Added with version 3 of the interface.
 	virtual void			OnEdictAllocated( edict_t *edict ) {};
 	virtual void			OnEdictFreed( const edict_t *edict ) {};
 

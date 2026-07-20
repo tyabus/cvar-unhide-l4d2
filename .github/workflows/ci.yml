@@ -14,7 +14,11 @@ jobs:
     strategy:
       matrix:
         os: [windows-2022, ubuntu-22.04]
-        game: [l4d2, l4d]
+        game: [l4d2, l4d, swarm]
+        exclude:
+          # No linux support for swarm
+          - os: ubuntu-22.04
+            game: swarm
 
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -69,10 +73,10 @@ jobs:
     - name: Filter VDF by game
       shell: bash
       run: |
-        if [ "${{ matrix.game }}" = "l4d2" ]; then
-          rm -f addons/cvar-unhide-l4d1.vdf
-        else
+        if [ "${{ matrix.game }}" = "l4d" ]; then
           rm -f addons/cvar-unhide.vdf
+        else
+          rm -f addons/cvar-unhide-l4d1.vdf
         fi
 
     - name: Archive binaries
